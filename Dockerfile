@@ -1,5 +1,10 @@
 FROM lvinkim/php-env-docker:php7.2.10-pure
 
+# 安装 php-mbstrig
+RUN apt-get update && apt-get install -y \
+    php-mbstring \
+  && rm -rf /var/lib/apt/lists/* && apt-get clean
+
 # 安装 swoole
 RUN cd /opt \
   && pecl download swoole-4.2.1 \
@@ -14,12 +19,12 @@ RUN cd /opt \
 
 ## 安装 imagick 扩展
 RUN apt-get update && apt-get install -y \
-    libmagickwand-dev \
-    imagemagick \
+    libgraphicsmagick1-dev \
+    graphicsmagick \
     pkg-config \
-  && pecl install imagick \
-  && echo "extension=imagick.so" > /etc/php/7.2/mods-available/imagick.ini \
-  && phpenmod imagick \
+  && pecl install gmagick-2.0.5RC1 \
+  && echo "extension=gmagick.so" > /etc/php/7.2/mods-available/gmagick.ini \
+  && phpenmod gmagick \
   && rm -rf /var/lib/apt/lists/* && apt-get clean
 
 # 安装 composer 相关
